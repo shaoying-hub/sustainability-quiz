@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>環境永續小測驗</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background-color: #f4f4f4; }
+    .quiz-container { background: white; padding: 1rem; border-radius: 8px; max-width: 900px; margin: auto; }
+    .question { margin-bottom: 1.5rem; }
+    .question h3 { margin-bottom: 0.5rem; }
+    .options label { display: block; margin-bottom: 0.3rem; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; margin-top: 1rem; }
+    .result { font-weight: bold; margin-top: 1.5rem; }
+    .incorrect { color: red; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>環境永續小測驗（共100題）</h1>
+    <form id="quiz-form"></form>
+    <button onclick="checkAnswers()">提交作答</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const questions = [{"type": "tf", "question": "若某區域的雨量減少，則該地可能會出現沙化現象。", "answer": true}, {"type": "tf", "question": "增加農地灌溉會使地下水資源更為穩定。", "answer": false}, {"type": "tf", "question": "高溫會加速土壤中微生物分解速度，因此可能降低碳儲存能力。", "answer": true}, {"type": "tf", "question": "過度捕撈會使某些魚種數量增加。", "answer": false}, {"type": "tf", "question": "如果海洋酸化持續，珊瑚礁生態系將受到嚴重威脅。", "answer": true}, {"type": "tf", "question": "冰川融化會使極地棲息地更加穩定。", "answer": false}, {"type": "tf", "question": "若森林被砍伐，當地氣溫可能會升高。", "answer": true}, {"type": "tf", "question": "乾旱地區出現大量水塘，代表氣候正在變冷。", "answer": false}, {"type": "tf", "question": "若某地降雨頻率增加，可能會導致土壤養分流失。", "answer": true}, {"type": "tf", "question": "極端暴雨可能導致生物多樣性提升。", "answer": false}, {"type": "tf", "question": "海平面上升可能使沿海地下水鹽化。", "answer": true}, {"type": "tf", "question": "冬季延長會使候鳥提早南飛。", "answer": false}, {"type": "tf", "question": "氣溫上升會增加寒帶森林的面積。", "answer": false}, {"type": "tf", "question": "熱帶雨林的消失對全球碳循環有負面影響。", "answer": true}, {"type": "tf", "question": "生物多樣性減少會提高生態系統穩定性。", "answer": false}, {"type": "tf", "question": "植被稀疏地區的土壤更易受到侵蝕。", "answer": true}, {"type": "tf", "question": "水庫增多能完全抵抗旱災發生。", "answer": false}, {"type": "tf", "question": "氣候變遷對極地比熱帶地區影響更大。", "answer": true}, {"type": "tf", "question": "都市熱島效應可由綠屋頂技術減輕。", "answer": true}, {"type": "tf", "question": "冬天的霜凍可能有助於提高作物收成。", "answer": false}, {"type": "tf", "question": "若空氣中水氣減少，雲層的形成機率也降低。", "answer": true}, {"type": "tf", "question": "沙漠中的氣溫變化比熱帶雨林小。", "answer": false}, {"type": "tf", "question": "過度施肥會導致地下水硝酸鹽濃度升高。", "answer": true}, {"type": "tf", "question": "氣候異常會使某些害蟲數量減少。", "answer": false}, {"type": "tf", "question": "人工濕地可用來減緩水災發生。", "answer": true}, {"type": "tf", "question": "種樹能有效減少都市中的二氧化碳累積。", "answer": true}, {"type": "tf", "question": "氣候變遷與糧食安全無關。", "answer": false}, {"type": "tf", "question": "高溫可能導致農作物早熟甚至失收。", "answer": true}, {"type": "tf", "question": "土壤流失會使耕地面積增加。", "answer": false}, {"type": "tf", "question": "草原的灌木化現象可能與氣候變遷有關。", "answer": true}, {"type": "tf", "question": "風災會促進森林更新與物種多樣性。", "answer": true}, {"type": "tf", "question": "城市道路排水良好可減少洪水風險。", "answer": true}, {"type": "tf", "question": "火災後的土地會永久喪失再生能力。", "answer": false}, {"type": "tf", "question": "地下水過度開採可能導致地層下陷。", "answer": true}, {"type": "tf", "question": "沙塵暴頻率增加與氣候無關。", "answer": false}, {"type": "tf", "question": "若乾旱頻繁，將減少河口的生物數量。", "answer": true}, {"type": "tf", "question": "珊瑚礁對溫度變化非常敏感。", "answer": true}, {"type": "tf", "question": "高山溫度升高可能導致雪線上移。", "answer": true}, {"type": "tf", "question": "乾旱導致農民種植多樣化作物的機會上升。", "answer": false}, {"type": "tf", "question": "極端高溫會增加電力需求。", "answer": true}, {"type": "tf", "question": "暖化將提升全球冰川覆蓋面積。", "answer": false}, {"type": "tf", "question": "大量雨水會稀釋水中污染物濃度。", "answer": true}, {"type": "tf", "question": "若氣候穩定，森林火災次數會增加。", "answer": false}, {"type": "tf", "question": "珊瑚白化與水溫升高無關。", "answer": false}, {"type": "tf", "question": "封閉水體若溫度升高會更易優養化。", "answer": true}, {"type": "tf", "question": "氣候變遷會提高熱帶病蔓延機率。", "answer": true}, {"type": "tf", "question": "人類活動與氣候變遷毫無關聯。", "answer": false}, {"type": "tf", "question": "生物入侵與全球暖化有可能互相影響。", "answer": true}, {"type": "mc", "question": "下列哪一個是草原生態系的特徵？", "options": ["全年高溫多雨", "樹木茂密", "草本植物優勢", "冰雪覆蓋"], "answer": 2}, {"type": "mc", "question": "台灣中部山區屬於哪種主要生態環境？", "options": ["熱帶雨林", "溫帶針葉林", "高山生態系", "沙漠生態系"], "answer": 2}, {"type": "mc", "question": "哪種行為最有助於減緩氣候變遷？", "options": ["增加塑膠製品使用", "多搭乘大眾運輸", "大量使用冷氣", "過度開發森林"], "answer": 1}, {"type": "mc", "question": "高山地區物種演化的主要原因為何？", "options": ["海洋鹽度變化", "氣壓變化", "氣溫差異大", "人為干擾少"], "answer": 2}, {"type": "mc", "question": "下列何者不是濕地的功能？", "options": ["淨化水質", "棲地提供", "碳固定", "製造工業能源"], "answer": 3}, {"type": "mc", "question": "哪種動物最可能生活在淡水河流中？", "options": ["鱷魚", "鯊魚", "鯉魚", "海豚"], "answer": 2}, {"type": "mc", "question": "珊瑚礁主要分布於哪種海域？", "options": ["寒帶深海", "熱帶淺海", "極地洋流", "深海火山口"], "answer": 1}, {"type": "mc", "question": "氣候變遷對極地熊類的主要影響是？", "options": ["增加覓食機會", "減少棲息地", "提升繁殖率", "體型變大"], "answer": 1}, {"type": "mc", "question": "哪一項與台灣的熱帶季風氣候有關？", "options": ["全年乾燥", "冬雨夏乾", "夏雨冬乾", "全年大雪"], "answer": 2}, {"type": "mc", "question": "若海水溫度上升，最可能導致？", "options": ["魚類遷徙", "浮游植物變少", "海水鹽度升高", "潮汐變化增強"], "answer": 0}, {"type": "mc", "question": "以下哪一項是碳足跡減量的方法？", "options": ["每天開車", "食用當地食材", "使用塑膠袋", "使用冷氣整日"], "answer": 1}, {"type": "mc", "question": "何種地形有助於形成雨林？", "options": ["乾燥盆地", "高溫沙漠", "迎風坡", "背風谷地"], "answer": 2}, {"type": "mc", "question": "下列哪種方式可保育生物多樣性？", "options": ["棲地破壞", "設立自然保留區", "引進外來種", "加強捕獵"], "answer": 1}, {"type": "mc", "question": "哪一項不是森林的生態功能？", "options": ["涵養水源", "防止土壤流失", "提高空氣污染", "提供棲息地"], "answer": 2}, {"type": "mc", "question": "台灣西部沿海常見哪類棲地？", "options": ["珊瑚礁", "沙漠", "紅樹林", "高山草原"], "answer": 2}, {"type": "mc", "question": "氣候變遷可能導致下列何種病媒蚊擴散？", "options": ["瘧蚊", "果蠅", "蜜蜂", "蒼蠅"], "answer": 0}, {"type": "mc", "question": "台灣哪一地形最容易發生山崩？", "options": ["平原", "丘陵", "高山", "盆地"], "answer": 2}, {"type": "mc", "question": "哪一種能源被視為再生能源？", "options": ["石油", "天然氣", "風力", "煤炭"], "answer": 2}, {"type": "mc", "question": "污染物容易累積在食物鏈哪一層？", "options": ["初級消費者", "生產者", "次級消費者", "頂級消費者"], "answer": 3}, {"type": "mc", "question": "下列何者最可能造成優養化？", "options": ["有機肥料流入水體", "空氣污染", "土石流", "森林砍伐"], "answer": 0}, {"type": "mc", "question": "氣候暖化使得下列哪種自然災害增加？", "options": ["火山爆發", "地震", "乾旱", "日蝕"], "answer": 2}, {"type": "mc", "question": "台灣哪種自然地形佔最大面積？", "options": ["山地", "河谷", "沙洲", "湖泊"], "answer": 0}, {"type": "mc", "question": "雨林中最常見的植物類型為？", "options": ["苔蘚", "針葉樹", "闊葉樹", "仙人掌"], "answer": 2}, {"type": "mc", "question": "哪項活動最容易導致土地退化？", "options": ["永續農業", "過度放牧", "自然保育", "造林"], "answer": 1}, {"type": "mc", "question": "何者屬於氣候變遷的間接影響？", "options": ["冰川融化", "海平面上升", "農作物減產", "氣溫升高"], "answer": 2}, {"type": "mc", "question": "氣候變遷可能對台灣農業造成何種影響？", "options": ["作物更耐旱", "增加耕地", "水資源壓力增加", "農藥減少使用"], "answer": 2}, {"type": "mc", "question": "哪一類生物在台灣高山生態系最常見？", "options": ["紅樹林植物", "魚類", "寒帶植物", "海洋哺乳類"], "answer": 2}, {"type": "mc", "question": "以下何者不是溫室氣體？", "options": ["二氧化碳", "甲烷", "氧氣", "氟氯碳化物"], "answer": 2}, {"type": "mc", "question": "氣候變遷會使何種災害的強度提升？", "options": ["颱風", "月食", "日蝕", "日照"], "answer": 0}, {"type": "mc", "question": "在海洋生態系中，基礎食物來源為？", "options": ["珊瑚", "浮游植物", "小型魚類", "水母"], "answer": 1}, {"type": "mc", "question": "哪一項措施不利於保護生態系？", "options": ["建立保護區", "開發濕地", "立法保護", "環境教育"], "answer": 1}, {"type": "mc", "question": "極端氣候最可能造成？", "options": ["物種穩定", "生態系退化", "疾病減少", "土地肥沃"], "answer": 1}, {"type": "mc", "question": "何者最適合種植於沙漠邊緣地區？", "options": ["水稻", "甘蔗", "仙人掌", "芒果"], "answer": 2}, {"type": "mc", "question": "以下哪一區最可能是熱帶雨林？", "options": ["亞馬遜", "喜馬拉雅", "撒哈拉", "西伯利亞"], "answer": 0}, {"type": "mc", "question": "哪種人類活動最會破壞珊瑚礁？", "options": ["捕魚", "觀光", "炸魚", "造船"], "answer": 2}, {"type": "mc", "question": "台灣哪一個季節最容易發生颱風？", "options": ["春季", "夏季", "秋季", "冬季"], "answer": 1}, {"type": "mc", "question": "哪個地區較容易面臨海水倒灌風險？", "options": ["內陸盆地", "高山地區", "沿海低窪地", "沙漠"], "answer": 2}, {"type": "mc", "question": "何者屬於永續發展行動？", "options": ["濫用自然資源", "鼓勵再生能源", "焚燒塑膠", "非法砍伐森林"], "answer": 1},
+      { type: 'mc', question: '下列哪一項措施最能有效減少碳足跡？', options: ["使用塑膠袋", "搭乘大眾運輸", "每天開冷氣", "吃大量紅肉"], answer: 1 },
+      { type: 'mc', question: '氣候變遷會對哪一項產業影響最大？', options: ["資訊科技", "農業", "娛樂業", "金融"], answer: 1 },
+      { type: 'mc', question: '哪一項自然現象與氣候變遷最有關？', options: ["地震", "颱風強度增加", "月蝕", "磁場變化"], answer: 1 },
+      { type: 'mc', question: '節能減碳行為中，下列哪個最有效？', options: ["熬夜開燈", "冷氣設定 18°C", "多吃蔬食", "每天開車上班"], answer: 2 },
+      { type: 'mc', question: '冰川融化造成的直接影響為：', options: ["海水溫度降低", "海平面下降", "海平面上升", "河流乾涸"], answer: 2 },
+      { type: 'mc', question: '哪一種能源最不會排放溫室氣體？', options: ["煤炭", "天然氣", "太陽能", "汽油"], answer: 2 },
+      { type: 'mc', question: '森林濫伐造成哪種影響最大？', options: ["降雨量增加", "碳吸存減少", "土壤肥沃化", "氣溫驟降"], answer: 1 },
+      { type: 'mc', question: '全球暖化會導致下列哪一種極端氣候？', options: ["日蝕", "暴雪減少", "乾旱頻繁", "颱風減弱"], answer: 2 },
+      { type: 'mc', question: '哪一種生活習慣最能減少能源浪費？', options: ["電器待機", "洗澡用冷水", "開窗開冷氣", "長時間充電"], answer: 1 },
+      { type: 'mc', question: '氣候變遷對哪類人群最不利？', options: ["城市居民", "沿海居民", "高收入群體", "科技工作者"], answer: 1 },
+      { type: 'mc', question: '地球暖化主要是因為什麼增加？', options: ["臭氧", "二氧化碳", "氮氣", "氫氣"], answer: 1 },
+      { type: 'mc', question: '哪個做法有助於保護水資源？', options: ["長時間洗車", "回收雨水", "洗澡開著水龍頭", "過度灌溉"], answer: 1 },
+      { type: 'mc', question: '哪一種方式能降低交通碳排放？', options: ["共乘", "個人開車", "飛機旅遊", "改裝跑車"], answer: 0 },
+      { type: 'mc', question: '極端氣候可能造成下列何者？', options: ["穩定農收", "糧食減產", "疾病減少", "土地增加"], answer: 1 }];
+
+    const form = document.getElementById('quiz-form');
+    questions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      const qText = document.createElement('h3');
+      qText.textContent = `${index + 1}. ${q.question}`;
+      div.appendChild(qText);
+      if (q.type === 'tf') {
+        ['是', '否'].forEach((label, i) => {
+          div.innerHTML += `<label><input type="radio" name="q${index}" value="${i === 0}"> ${label}</label>`;
+        });
+      } else if (q.type === 'mc') {
+        q.options.forEach((opt, i) => {
+          div.innerHTML += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
+        });
+      }
+      form.appendChild(div);
+    });
+
+    function checkAnswers() {
+      let correct = 0;
+      let incorrectList = [];
+      questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected) {
+          if (q.type === 'tf' && selected.value === String(q.answer)) correct++;
+          else if (q.type === 'mc' && Number(selected.value) === q.answer) correct++;
+          else incorrectList.push(i + 1);
+        } else incorrectList.push(i + 1);
+      });
+      let output = `你答對了 ${correct} / ${questions.length} 題！`;
+      if (incorrectList.length > 0) output += `<br><span class="incorrect">錯誤題號：${incorrectList.join(', ')}</span>`;
+      document.getElementById('result').innerHTML = output;
+      const allInputs = document.querySelectorAll('input');
+      allInputs.forEach(input => input.disabled = true);
+    }
+  </script>
+</body>
+</html>
